@@ -1,20 +1,17 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = process.env.DATABASE_URL
-  ? new Sequelize(process.env.DATABASE_URL, {
-      dialect: 'postgres',
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      },
-      logging: false,
-    })
-  : new Sequelize('gitpulse', 'your_local_username', 'your_local_password', {
-      host: 'localhost',
-      dialect: 'postgres',
-      logging: false,
-    });
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,
+  dialectOptions: process.env.NODE_ENV === 'production' ? {
+    ssl: { require: true, rejectUnauthorized: false }
+  } : {},
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+});
 
 module.exports = sequelize;
