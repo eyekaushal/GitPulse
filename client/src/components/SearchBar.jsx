@@ -1,39 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function SearchBar({ onSearch, loading }) {
+const SearchBar = ({ onSearch, loading }) => {
   const [input, setInput] = useState('');
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const trimmed = input.trim();
-    if (trimmed) {
-      onSearch(trimmed);
-    }
-  }
+    if (trimmed) onSearch(trimmed);
+  };
 
   return (
-    <div className="search-section">
-      <h1 className="app-title">GitPulse</h1>
-      <p className="app-subtitle">GitHub Developer Activity Storyteller</p>
-      <form className="search-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter GitHub username..."
-          className="search-input"
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          className="search-button"
-          disabled={loading || !input.trim()}
-        >
-          {loading ? 'Searching...' : 'Analyze'}
-        </button>
-      </form>
-    </div>
+    <form className="search-bar" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Enter GitHub username"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={loading}
+      />
+      <button type="submit" disabled={loading || !input.trim()}>
+        {loading ? 'Analyzing...' : 'Analyze'}
+      </button>
+    </form>
   );
-}
+};
 
 export default SearchBar;

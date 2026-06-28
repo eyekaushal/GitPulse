@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getProfile } = require('../controllers/profileController');
+const { getProfile, compareProfiles } = require('../controllers/profileController');
 const { getInsights } = require('../controllers/insightsController');
 const { getComparison } = require('../controllers/compareController');
 const { createShareLink, getShareLink } = require('../controllers/shareController');
@@ -12,8 +12,9 @@ router.get('/health', (req, res) => {
 
 router.get('/profile/:username', rateLimiter, getProfile);
 router.get('/insights/:username', rateLimiter, getInsights);
+router.get('/compare/:username1/:username2', rateLimiter, compareProfiles);
 router.get('/compare', rateLimiter, getComparison);
 router.post('/share', rateLimiter, createShareLink);
-router.get('/share/:slug', getShareLink);
+router.get('/share/:slug', rateLimiter, getShareLink);
 
 module.exports = router;

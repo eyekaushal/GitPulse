@@ -26,8 +26,14 @@ function Dashboard() {
       const result = await fetchProfile(searchUsername);
       setData(result);
     } catch (err) {
-      const message = err.response?.data?.error || err.message;
-      setError(message);
+      const status = err.response?.status;
+      if (status === 404) {
+        setError(`User "${searchUsername}" not found on GitHub. Check the spelling and try again.`);
+      } else if (status === 429) {
+        setError('GitHub API rate limit exceeded. Please wait a few minutes and try again.');
+      } else {
+        setError(err.response?.data?.error || err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -35,9 +41,20 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <SearchBar onSearch={handleSearch} loading={loading} />
+      <div className="dashboard-hero">
+        <h1 className="dashboard-title">GitPulse</h1>
+        <p className="dashboard-subtitle">
+          Visualize any GitHub developer's activity and stats
+        </p>
+        <SearchBar onSearch={handleSearch} loading={loading} />
+      </div>
 
-      {error && <div className="error-message">❌ {error}</div>}
+      {error && (
+        <div className="error-banner">
+          <span className="error-icon">⚠️</span>
+          <span>{error}</span>
+        </div>
+      )}
 
       {loading && <Loading />}
 
@@ -45,21 +62,25 @@ function Dashboard() {
         <div className="results">
           <ProfileHeader profile={data.profile} />
           <StreakStats streakStats={data.streakStats} />
-
           <div className="two-column">
             <LanguageChart languages={data.languageBreakdown} />
             <CommitTimeline timeline={data.commitTimeline} />
           </div>
-
           <ActivityHeatmap heatmap={data.activityHeatmap} />
           <TopRepos repos={data.topRepos} username={username} />
           <InsightCards insights={data.insights} />
-
           {data.cached && (
             <p className="cache-note">
               📦 Cached data from {new Date(data.fetchedAt).toLocaleString()}
             </p>
           )}
+        </div>
+      )}
+
+      {!data && !loading && !error && (
+        <div className="landing-state">
+          <div className="landing-icon">🔍</div>
+          <p>Enter a GitHub username above to get started</p>
         </div>
       )}
     </div>

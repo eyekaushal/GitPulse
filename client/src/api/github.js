@@ -8,33 +8,28 @@ const api = axios.create({
 });
 
 export async function fetchProfile(username) {
-  const response = await api.get(`/api/profile/${username}`);
-  return response.data;
+  const res = await api.get(`/api/profile/${username}`);
+  return res.data;
 }
 
-export async function fetchInsights(username) {
-  const response = await api.get(`/api/insights/${username}`);
-  return response.data;
+export async function compareProfiles(username1, username2) {
+  const res = await api.get(`/api/compare/${username1}/${username2}`);
+  return res.data;
 }
 
-export async function fetchComparison(username1, username2) {
-  const response = await api.get('/api/compare', {
-    params: { users: `${username1},${username2}` },
-  });
-  return response.data;
+export async function createShareLink(data) {
+  const res = await api.post('/api/share', data);
+  return res.data;
 }
 
-export async function createShareLink(username, data) {
-  const response = await api.post('/api/share', { username, data });
-  return response.data;
-}
-
-export async function fetchSharedProfile(slug) {
-  const response = await api.get(`/api/share/${slug}`);
-  return response.data;
+export async function getShareLink(token) {
+  const res = await api.get(`/api/share/${token}`);
+  return res.data;
 }
 
 export async function checkHealth() {
-  const response = await api.get('/api/health');
-  return response.data;
+  const res = await api.get('/api/health');
+  return res.data;
 }
+
+export default api;

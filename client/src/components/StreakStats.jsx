@@ -1,9 +1,9 @@
 function StreakStats({ streakStats }) {
   const stats = [
-    { label: 'Current Streak', value: `${streakStats.currentStreak} days`, icon: '🔥' },
-    { label: 'Longest Streak', value: `${streakStats.longestStreak} days`, icon: '🏆' },
-    { label: 'Active Days', value: streakStats.totalActiveDays, icon: '📅' },
-    { label: 'Total Commits', value: streakStats.totalCommits, icon: '💻' },
+    { label: 'Current Streak', value: `${streakStats.currentStreak} days`,  },
+    { label: 'Longest Streak', value: `${streakStats.longestStreak} days`,  },
+    { label: 'Active Days', value: streakStats.totalActiveDays,  },
+    { label: 'Total Commits', value: streakStats.totalCommits,  },
   ];
 
   return (
