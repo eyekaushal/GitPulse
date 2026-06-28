@@ -2,9 +2,8 @@ import axios from 'axios';
 
 const API_BASE = process.env.REACT_APP_API_URL || '';
 
-const api = axios.create({
-  baseURL: API_BASE,
-  timeout: 30000,
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5001/api',
 });
 
 export async function fetchProfile(username) {
